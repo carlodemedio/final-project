@@ -95,13 +95,43 @@ surface = STRUCT([surface1,chiusura1,chiusura2,chiusura3])
 dietro = STRUCT([surface,T([1])([25])(surface)])
 
 poltrona00 = STRUCT([dietro,bordo])
-poltrona = T([2])([60])(S([0,1,2])([1.3,1.3,1.3])(STRUCT([poltrona00,T([0,1])([685,25])(R([0,1])(PI)(poltrona00))])))
+
+poltrona = T([1,2])([-2,60])(S([0,1,2])([1.3,1.3,1.3])(STRUCT([poltrona00,T([0,1])([685,25])(R([0,1])(PI)(poltrona00))])))
 
 
 poltrona = T([0,1,2])([-225,-30,-495])(STRUCT([spalliere,poltrona]))
 
-DRAW(poltrona)
 
+
+
+
+var sotto = BEZIER(S0)([[0,0,0],[2,1.4,0],[4,0,0]])
+var sotto2  = BEZIER(S0)([[0,0,5],[2,1.4,5],[4,0,5]])
+
+var sopra = BEZIER(S0)([ [0,4,0],[2,4.5,0],[4,4,0] ])
+var sopra2 = BEZIER(S0)([ [0,4,5],[2,4.5,5],[4,4,5] ])
+
+var latoSotto = BEZIER(S0)([ [0,0,0],[0,0,5] ])
+var latoSotto2 = BEZIER(S0)([ [4,0,0],[4,0,5] ])
+
+var latoSopra = BEZIER(S0)([[0,4,0],[0,4,5]])
+var latoSopra2 = BEZIER(S0)([[4,4,0],[4,4,5]])
+
+var avanti = MAP(BEZIER(S1)([sotto,sopra]))(domain2)
+var dietro = MAP(BEZIER(S1)([sotto2,sopra2]))(domain2)
+var su = MAP(BEZIER(S1)([sopra,sopra2]))(domain2)
+var giu = MAP(BEZIER(S1)([sotto,sotto2]))(domain2)
+var latoSx = MAP(BEZIER(S1)([latoSotto,latoSopra]))(domain2)
+var latoDx = MAP(BEZIER(S1)([latoSotto2,latoSopra2]))(domain2)
+
+cuscino = T([0,2])([120,130])(S([0,1,2])([50,44,38])(   R([1,2])(-PI/2)(  STRUCT([avanti,dietro,su,giu,latoSx,latoDx]))))
+
+model = S([0,1,2])([0.05,0.05,0.05])(COLOR([1,0,0])(STRUCT([poltrona,cuscino])))
+
+var tappeto = COLOR([0,0,0])(R([1,2])([-PI/2])(CUBOID([40,5,40])))
+
+
+DRAW(R([1,2])([PI/2])(STRUCT([model,T([0,1,2])([-10,-17,13])(tappeto)])))
 
 
 
